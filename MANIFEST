@@ -7,5 +7,12 @@ README
 lib/Padre/Debugger.pm
 
 t/01-add.t
+t/02-sub.t
+t/02-sub-step_over.t
+t/02-sub-step_out.t
+
+t/lib/Debugger.pm
+
 t/eg/01-add.pl
+t/eg/02-sub.pl
 META.yml

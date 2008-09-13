@@ -1,6 +1,6 @@
 ---
 name: Padre-Debugger
-version: 0.01
+version: 0.02
 author:
   - Gabor Szabo
 abstract: client side code for perl debugger
@@ -18,7 +18,7 @@ build_requires:
 provides:
   Padre::Debugger:
     file: lib/Padre/Debugger.pm
-    version: 0.01
+    version: 0.02
 generated_by: Module::Build version 0.2808
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.2.html
