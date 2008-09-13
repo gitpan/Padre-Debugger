@@ -2,7 +2,11 @@ package Padre::Debugger;
 use strict;
 use warnings;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
+
+our $response;
+# keep last response here so test code
+# can display it for debugging purposes
 
 use IO::Socket;
 
@@ -101,13 +105,26 @@ sub step_out  {
 
     # scalar context return from main::f: 242
     # main::(t/eg/02-sub.pl:9):	my $z = $x + $y;
+
+    # list context return from main::g:
+    # 0  'baz'
+    # 1  'foo
+    # bar'
+    # 2  'moo'
+    # main::(t/eg/03-return.pl:10):	$x++;
+
     if (wantarray) {
         my $prompt = _prompt(\$buf);
         my @line = _process_line(\$buf);
         my $ret;
-        if ($buf =~ /^scalar context return from (\S+): (.*)/s) {
-            $ret = $2;
+        my $context;
+        if ($buf =~ /^(scalar|list) context return from (\S+):\s*(.*)/s) {
+            $context = $1;
+            $ret = $3;
         }
+        #if ($context and $context eq 'list') {
+            # TODO can we parse this inteligently in the general case?
+        #}
         return (@line, $prompt, $ret);
     } else {
         return $buf;
@@ -138,6 +155,7 @@ sub _get {
     my $buf = '';
     $self->{new_sock}->sysread($buf, 1024, length $buf) while $buf !~ /DB<\d+>/;
 
+    $response = $buf;
     return $buf;
 }
 
